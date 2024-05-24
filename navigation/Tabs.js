@@ -1,7 +1,7 @@
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import { Ionicons } from '@expo/vector-icons';
 
-import Movie from "../screens/Movie";
+import Movie from "../screens/Movies";
 import Tv from "../screens/Tv";
 import Search from "../screens/Search";
 
