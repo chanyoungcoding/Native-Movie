@@ -2,7 +2,11 @@
   "expo": {
     "name": "moviesApp",
     "slug": "moviesApp",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "plugins": [
+      "expo-font",
+      "expo-asset"
+    ]
   },
   "name": "moviesApp"
 }
