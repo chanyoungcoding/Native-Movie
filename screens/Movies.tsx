@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Swiper from 'react-native-web-swiper';
 import styled from 'styled-components/native';
-import { ActivityIndicator, Dimensions, StyleSheet } from 'react-native';
-import { makeImgPath } from '../utils';
+import { ActivityIndicator, Dimensions } from 'react-native';
+import Slide from '../components/Slide';
 
 const options = {
   method: 'GET',
@@ -20,17 +20,35 @@ const Movie:React.FC<NativeStackScreenProps<any, "Movies">> = () => {
 
   const [loading, setLoading] = useState(true);
   const [nowPlaying, setNowPlaying] = useState([]);
+  const [upcoming, setUpcoming] = useState([]);
+  const [trending, setTrending] = useState([]);
+
+  const getTrending = async () => {
+    const response = await fetch('https://api.themoviedb.org/3/trending/movie/week', options)
+    const data = await response.json();
+    setTrending(data.results)
+  }
+
+  const getUpcoming = async () => {
+    const response = await fetch('https://api.themoviedb.org/3/movie/upcoming', options)
+    const data = await response.json();
+    setUpcoming(data.results)
+  }
 
   const getNowPlaying = async () => {
     const response = await fetch('https://api.themoviedb.org/3/movie/now_playing', options)
     const data = await response.json();
     setNowPlaying(data.results);
+  }
+
+  const getData = async () => {
+    await Promise.all([getTrending(), getUpcoming(), getNowPlaying()])
     setLoading(false);
   }
 
   useEffect(() => {
-    getNowPlaying();
-  })
+    getData()
+  }, [])
 
   return loading ? (
     <Loader>
@@ -40,22 +58,19 @@ const Movie:React.FC<NativeStackScreenProps<any, "Movies">> = () => {
     <Container >
       <Swiper 
         loop 
-        timeout={2}
+        timeout={3}
         controlsEnabled={false}
         containerStyle={{width: "100%", height: SCREEN_HEIGHT / 3}}
       >
         {nowPlaying.map(movie => (
-          <View key={movie.id}>
-            <BgImg source={{ uri: makeImgPath(movie.backdrop_path)}} style={StyleSheet.absoluteFill} blurRadius={2} />
-            <Box style={StyleSheet.absoluteFill}>
-              <Poster source={{uri: makeImgPath(movie.poster_path)}}/>
-              <BoxText>
-                <Title>{movie.original_title}</Title>
-                <Overview>{movie.overview.slice(0,80)} ...</Overview>
-                {movie.vote_average > 0 ? (<Votes>❤️ {Math.trunc(movie.vote_average)} / 10</Votes>) : null}
-              </BoxText>
-            </Box>
-          </View>
+          <Slide
+            key={movie.id} 
+            backdropPath={movie.backdrop_path}
+            posterPath={movie.poster_path}
+            originalTitle={movie.original_title}
+            voteAverage={movie.vote_average}
+            overView={movie.overview}
+          />
         ))}
 
       </Swiper>
@@ -69,45 +84,7 @@ const Container = styled.ScrollView`
   background-color: ${props => props.theme.mainBgColor};
 `
 
-const View = styled.View`
-  flex: 1;
-`
-
 const Loader = styled.View``
 
-const BgImg = styled.Image``; 
-
-const Poster = styled.Image`
-  width: 100px;
-  height: 160px;
-  margin-right: 10px;
-  border-radius: 5px;
-`;
-
-const Box = styled.View`
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0,0,0,0.3);
-`
-
-const BoxText = styled.View`
-  width: 50%;
-`
-
-const Title = styled.Text`
-  font-size: 16px;
-  font-weight: 600;
-  color: white;
-`
-
-const Overview = styled.Text`
-  margin-top: 5px;
-  color: rgba(255,255,255,0.6);
-`
-
-const Votes = styled(Overview)`
-  font-size: 12px;
-`
 
 export default Movie
