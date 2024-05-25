@@ -5,6 +5,7 @@ import Swiper from 'react-native-web-swiper';
 import styled from 'styled-components/native';
 import { ActivityIndicator, Dimensions } from 'react-native';
 import Slide from '../components/Slide';
+import Poster from '../components/Poster';
 
 const options = {
   method: 'GET',
@@ -60,7 +61,7 @@ const Movie:React.FC<NativeStackScreenProps<any, "Movies">> = () => {
         loop 
         timeout={3}
         controlsEnabled={false}
-        containerStyle={{width: "100%", height: SCREEN_HEIGHT / 3}}
+        containerStyle={{width: "100%", height: SCREEN_HEIGHT / 3, marginBottom: 30}}
       >
         {nowPlaying.map(movie => (
           <Slide
@@ -74,6 +75,24 @@ const Movie:React.FC<NativeStackScreenProps<any, "Movies">> = () => {
         ))}
 
       </Swiper>
+
+      <ListTitle>Trending Movies</ListTitle>
+      <TrendingScroll
+        horizontal
+        contentContainerStyle={{paddingLeft: 30}}
+        showsHorizontalScrollIndicator={false}
+      >
+        {trending.map(movie => (
+          <Movies key={movie.id}>
+            <Poster path={movie.poster_path} />
+            <Title>
+              {movie.original_title.slice(0, 13)}
+              {movie.original_title.length > 13 ? "..." : null}
+            </Title>
+            <Votes>❤️ {Math.trunc(movie.vote_average)} / 10</Votes>
+          </Movies>
+        ))}
+      </TrendingScroll>
     </Container>
   )
 }
@@ -86,5 +105,31 @@ const Container = styled.ScrollView`
 
 const Loader = styled.View``
 
+const ListTitle = styled.Text`
+  color: ${props => props.theme.textColor};
+  font-size: 18px;
+  font-weight: 600;
+  margin-left: 30px;
+`;
+
+const TrendingScroll = styled.ScrollView`
+  margin-top: 20px;
+`;
+
+const Movies = styled.View`
+  margin-right: 20px;
+  align-items: center;
+`;
+
+const Title = styled.Text`
+  color: ${props => props.theme.textColor};
+  font-weight: 600;
+  margin-top: 7px;
+  margin-bottom: 5px;
+`;
+const Votes = styled.Text`
+  color: ${props => props.theme.textColor};
+  font-size: 10px;
+`;
 
 export default Movie
