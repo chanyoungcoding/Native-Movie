@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Swiper from 'react-native-web-swiper';
 import styled from 'styled-components/native';
-import { ActivityIndicator, Dimensions } from 'react-native';
+import { ActivityIndicator, Dimensions, RefreshControl } from 'react-native';
 import Slide from '../components/Slide';
 import Poster from '../components/Poster';
 
@@ -19,6 +19,7 @@ const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 const Movie:React.FC<NativeStackScreenProps<any, "Movies">> = () => {
 
+  const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [nowPlaying, setNowPlaying] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
@@ -51,12 +52,18 @@ const Movie:React.FC<NativeStackScreenProps<any, "Movies">> = () => {
     getData()
   }, [])
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    getData();
+    setRefreshing(false);
+  }
+
   return loading ? (
     <Loader>
       <ActivityIndicator/>
     </Loader>
   ) : (
-    <Container >
+    <Container refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing}/>} >
       <Swiper 
         loop 
         timeout={3}
@@ -93,6 +100,25 @@ const Movie:React.FC<NativeStackScreenProps<any, "Movies">> = () => {
           </Movies>
         ))}
       </TrendingScroll>
+      <ComingSoonTitle>Coming Soon</ComingSoonTitle>
+      {upcoming.map(movie => (
+        <HMovie key={movie.id}>
+          <Poster path={movie.poster_path} />
+          <HColumn>
+            <Title>{movie.original_title}</Title>
+            <Release>
+              {new Date(movie.release_date).toLocaleDateString("ko", {
+                month: "long",
+                day: "numeric",
+                year: "numeric"
+              })}
+            </Release>
+            <Overview>
+              {movie.overview !== "" && movie.overview.length > 80 ? `${movie.overview.slice(0, 140)}...` : movie.overview}
+            </Overview>
+          </HColumn>
+        </HMovie>
+      ))}
     </Container>
   )
 }
@@ -127,9 +153,42 @@ const Title = styled.Text`
   margin-top: 7px;
   margin-bottom: 5px;
 `;
+
 const Votes = styled.Text`
   color: ${props => props.theme.textColor};
   font-size: 10px;
 `;
+
+const ComingSoonTitle = styled.Text`
+  margin: 20px 0px;
+  margin-left: 30px;
+  color: ${props => props.theme.textColor};
+  font-size: 18px;
+  font-weight: 600;
+`
+
+const HMovie = styled.View`
+  padding: 0px 30px;
+  margin-bottom: 30px;
+  flex-direction: row;
+`
+
+const HColumn = styled.View`
+  margin-left: 15px;
+  width: 80%;
+`
+
+const Overview = styled.Text`
+  color: ${props => props.theme.textColor};
+  opacity: 0.8;
+  width: 80%;
+`
+
+const Release = styled.Text`
+  color: ${props => props.theme.textColor};
+  font-size: 12px;
+  margin: 10px 0px;
+`
+
 
 export default Movie
