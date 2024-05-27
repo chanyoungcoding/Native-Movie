@@ -6,10 +6,12 @@ import {Ionicons} from "@expo/vector-icons";
 import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { useColorScheme } from "react-native";
 import { ThemeProvider } from "styled-components/native";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import Root from "./navigation/Root";
 import { darkTheme, lightTheme } from "./Styled";
 
+const queryClient = new QueryClient();
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
@@ -28,11 +30,13 @@ export default function App() {
   }
 
   return (
-    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-      <NavigationContainer theme={isDark ? DarkTheme : DefaultTheme} onReady={onLayoutRootView}>
-        <Root/>
-      </NavigationContainer>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+        <NavigationContainer theme={isDark ? DarkTheme : DefaultTheme} onReady={onLayoutRootView}>
+          <Root/>
+        </NavigationContainer>
+      </ThemeProvider>
+    </QueryClientProvider>
   )
 }
 

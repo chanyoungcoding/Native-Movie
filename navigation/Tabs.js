@@ -13,6 +13,7 @@ const Tabs = () => {
     <Tab.Navigator 
       initialRouteName="Tv" 
       screenOptions={{
+        unmountOnBlur: true,
         tabBarLabelStyle: {
           marginTop: -5,
           fontSize: 12,

@@ -12,7 +12,7 @@
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
-    "@tanstack/react-query": "^5.37.1",
+    "@tanstack/react-query": "^5.39.0",
     "expo": "~51.0.8",
     "expo-app-loading": "^2.1.1",
     "expo-asset": "~10.0.6",
@@ -33,6 +33,7 @@
     "@tsconfig/react-native": "^3.0.5",
     "@types/jest": "^29.5.12",
     "@types/react": "^18.3.3",
+    "@types/react-native": "^0.73.0",
     "@types/react-test-renderer": "^18.3.0",
     "typescript": "^5.4.5"
   },
