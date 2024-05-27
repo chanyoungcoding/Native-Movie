@@ -21,7 +21,7 @@ const Slide:React.FC<SlideProps> = ({backdropPath, posterPath, originalTitle, vo
         <Poster path={posterPath}/>
         <BoxText>
           <Title>{originalTitle}</Title>
-          <Overview>{overView.slice(0,80)} ...</Overview>
+          <Overview>{overView && overView.slice(0,80)} ...</Overview>
           {voteAverage > 0 ? (<Votes>❤️ {Math.trunc(voteAverage)} / 10</Votes>) : null}
         </BoxText>
       </Box>
