@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Dimensions, FlatList } from 'react-native';
@@ -7,7 +7,6 @@ import Swiper from 'react-native-web-swiper';
 import styled from 'styled-components/native';
 
 import { MovieResponse, moviesApi } from '../api';
-import VMedia from '../components/VMedia';
 import HMedia from '../components/HMedia';
 import Slide from '../components/Slide';
 import Loader from '../components/Loader';
@@ -17,32 +16,35 @@ const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 const Movie:React.FC<NativeStackScreenProps<any, "Movies">> = () => {
 
+  const [refreshing, setRefreshing] = useState(false);
+
   const queryClient = useQueryClient();
 
   const MovieKey = (item: any) => item.id + ""
 
-  const { isLoading: nowPlayingLoading, data: nowPlayingData, isRefetching: isRefetchingNowPlaying, } = useQuery<MovieResponse>({
+  const { isLoading: nowPlayingLoading, data: nowPlayingData} = useQuery<MovieResponse>({
     queryKey: ["movies", "nowPlaying"],
     queryFn: moviesApi.MoviesnowPlaying
   });
 
-  const { isLoading: upcomingLoading, data: upcomingData, isRefetching: isRefetchingUpcoming, } = useQuery<MovieResponse>({
+  const { isLoading: upcomingLoading, data: upcomingData } = useQuery<MovieResponse>({
     queryKey: ["movies", "upcoming"],
     queryFn: moviesApi.Moviesupcoming
   });
 
-  const { isLoading: trendingLoading, data: trendingData, isRefetching: isRefetchingTrending, } = useQuery<MovieResponse>({
+  const { isLoading: trendingLoading, data: trendingData} = useQuery<MovieResponse>({
     queryKey: ["movies", "trending"],
     queryFn: moviesApi.Moviestrending
   });
 
   const onRefresh = async () => {
-    queryClient.refetchQueries({queryKey: ["movies"]})
+    setRefreshing(true);
+    await queryClient.refetchQueries({queryKey: ["movies"]});
+    setRefreshing(false);
   };
 
   const loading = nowPlayingLoading || upcomingLoading || trendingLoading
 
-  const refreshing = isRefetchingNowPlaying || isRefetchingUpcoming || isRefetchingTrending;
     
   return loading ? ( <Loader/>
   ) : upcomingData ? (
@@ -91,18 +93,6 @@ const Movie:React.FC<NativeStackScreenProps<any, "Movies">> = () => {
   ) : null;
 };
 
-
-const ListTitle = styled.Text`
-  color: ${props => props.theme.textColor};
-  font-size: 18px;
-  font-weight: 600;
-  margin-left: 30px;
-`;
-
-const TrendingScroll = styled.FlatList`
-  margin-top: 20px;
-` as unknown as typeof FlatList;
-
 const ComingSoonTitle = styled.Text`
   margin: 20px 0px;
   margin-left: 30px;
@@ -110,10 +100,6 @@ const ComingSoonTitle = styled.Text`
   font-size: 18px;
   font-weight: 600;
 `
-
-const VSeparator = styled.View`
-  width: 20px;
-`;
 
 const HSeparator = styled.View`
   height: 20px;
