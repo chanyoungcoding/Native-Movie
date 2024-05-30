@@ -36,20 +36,27 @@ export interface MovieResponse extends BaseResponse {
   results: Movie[];
 }
 
-const trending = () =>
-  fetch(`${BASE_URL}/trending/movie/week`, options).then((res) =>
-    res.json()
-  );
+// Movies
+const Moviestrending = () =>
+  fetch(`${BASE_URL}/trending/movie/week`, options).then((res) => res.json());
 
-const upcoming = () =>
-  fetch(
-    `${BASE_URL}/movie/upcoming`, options
-  ).then((res) => res.json());
+const Moviesupcoming = () =>
+  fetch(`${BASE_URL}/movie/upcoming`, options).then((res) => res.json());
 
-const nowPlaying = () =>
-  fetch(
-    `${BASE_URL}/movie/now_playing`, options
-  ).then((res) => res.json());
+const MoviesnowPlaying = () =>
+  fetch(`${BASE_URL}/movie/now_playing`, options).then((res) => res.json());
 
+export const moviesApi = { Moviestrending, Moviesupcoming, MoviesnowPlaying };
 
-export const moviesApi = { trending, upcoming, nowPlaying }
+// Tv
+const Tvtrending = () => 
+  fetch(`${BASE_URL}/trending/tv/week`, options).then((res) => res.json());
+
+const TvairingToday = () => 
+  fetch(`${BASE_URL}/tv/airing_today`, options).then((res) => res.json());
+
+const TvtopRated = () => 
+  fetch(`${BASE_URL}/tv/top_rated`, options).then((res) => res.json());
+
+export const tvApi = { Tvtrending, TvairingToday, TvtopRated };
+

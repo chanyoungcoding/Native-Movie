@@ -7,7 +7,7 @@ interface VotesProps {
 
 
 const Votes: React.FC<VotesProps> = ({ votes }) => (
-  <Text>{votes > 0 ? `⭐️ ${votes}/10` : `Coming soon`}</Text>
+  <Text>{votes > 0 ? `⭐️ ${Math.trunc(votes)} / 10` : `Coming soon`}</Text>
 );
 
   const Text = styled.Text`
