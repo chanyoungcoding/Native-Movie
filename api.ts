@@ -1,3 +1,5 @@
+import { QueryFunctionContext } from "@tanstack/react-query";
+
 const API_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ZjQyM2Y0MWNmNTY4YTY1NDJhMjAzYzA0M2JlMzI0MyIsInN1YiI6IjY0M2ZlOWJiN2U0MDNkMDJmYzI1OTk2YiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.jry2V7IwAMEedIiBYhEXioFY3OokzRHqyKcDzdCdWdE"
 const BASE_URL = "https://api.themoviedb.org/3";
 
@@ -46,7 +48,14 @@ const Moviesupcoming = () =>
 const MoviesnowPlaying = () =>
   fetch(`${BASE_URL}/movie/now_playing`, options).then((res) => res.json());
 
-export const moviesApi = { Moviestrending, Moviesupcoming, MoviesnowPlaying };
+const MoviesSearch = ({queryKey} : QueryFunctionContext<[string, string]>) => {
+  const [_, query] = queryKey;
+  return fetch(
+    `${BASE_URL}/search/movie?api_key=${API_KEY}&language=en-US&page=1&query=${query}`, options
+  ).then((res) => res.json())
+}
+
+export const moviesApi = { Moviestrending, Moviesupcoming, MoviesnowPlaying, MoviesSearch };
 
 // Tv
 const Tvtrending = () => 
@@ -58,5 +67,12 @@ const TvairingToday = () =>
 const TvtopRated = () => 
   fetch(`${BASE_URL}/tv/top_rated`, options).then((res) => res.json());
 
-export const tvApi = { Tvtrending, TvairingToday, TvtopRated };
+const TvSearch = ({queryKey} : QueryFunctionContext<[string, string]>) => {
+  const [_, query] = queryKey;
+  return fetch(
+    `${BASE_URL}/search/tv?api_key=${API_KEY}&language=en-US&page=1&query=${query}`, options
+  ).then((res) => res.json())
+}
+
+export const tvApi = { Tvtrending, TvairingToday, TvtopRated, TvSearch };
 
