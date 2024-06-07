@@ -24,7 +24,7 @@ const HMedia: React.FC<HMediaProps> = ({
 
   const navigation = useNavigation();
   const goToDetail = () => {
-    navigation.navigate("Stack", { screen: "Detail" });
+    navigation.navigate("Stack", { screen: "Detail", params: { originalTitle } });
   };
 
   return (
@@ -70,12 +70,14 @@ const HColumn = styled.View`
 `;
 
 const Overview = styled.Text`
-  color: ${props => props.theme.textColor};  opacity: 0.8;
+  color: ${props => props.theme.textColor};  
+  opacity: 0.8;
   width: 80%;
 `;
 
 const Release = styled.Text`
-  color: ${props => props.theme.textColor};  font-size: 12px;
+  color: ${props => props.theme.textColor};  
+  font-size: 12px;
   margin: 10px 0px;
   font-weight: 500;
   opacity: 0.6;

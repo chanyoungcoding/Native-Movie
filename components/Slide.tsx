@@ -18,7 +18,7 @@ const Slide:React.FC<SlideProps> = ({backdropPath, posterPath, originalTitle, vo
 
   const navigation = useNavigation();
   const goToDetail = () => {
-    navigation.navigate("Stack", { screen: "Detail" });
+    navigation.navigate("Stack", { screen: "Detail", params: { originalTitle } });
   };
 
   return (
@@ -54,12 +54,12 @@ const BoxText = styled.View`
 const Title = styled.Text`
   font-size: 16px;
   font-weight: 600;
-  color: white;
+  color: ${props => props.theme.textColor}; 
 `
 
 const Overview = styled.Text`
   margin-top: 5px;
-  color: rgba(255,255,255,0.6);
+  color: ${props => props.theme.textColor}; 
 `
 
 const Votes = styled(Overview)`
