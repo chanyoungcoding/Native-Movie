@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { makeImgPath } from '../utils';
 import Poster from './Poster';
+import { Movie } from '../api';
 
 interface SlideProps {
   backdropPath: string;
@@ -12,13 +13,15 @@ interface SlideProps {
   originalTitle: string;
   voteAverage: number;
   overView: string;
+  fullData: Movie;
 }
 
-const Slide:React.FC<SlideProps> = ({backdropPath, posterPath, originalTitle, voteAverage, overView}) => {
+const Slide:React.FC<SlideProps> = ({backdropPath, posterPath, originalTitle, voteAverage, overView, fullData}) => {
 
   const navigation = useNavigation();
   const goToDetail = () => {
-    navigation.navigate("Stack", { screen: "Detail", params: { originalTitle } });
+    //@ts-ignore
+    navigation.navigate("Stack", { screen: "Detail", params: { ...fullData } });
   };
 
   return (
