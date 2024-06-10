@@ -72,7 +72,7 @@ const MoviesSearch = ({queryKey} : QueryFunctionContext<[string, string]>) => {
   ).then((res) => res.json())
 }
 
-const MovieDetail = ({ queryKey } : QueryFunctionContext<[string, string]>) => {
+const MovieDetail = ({ queryKey } : QueryFunctionContext<[string, number]>) => {
   const [_, id] = queryKey;
   return fetch(
     `${BASE_URL}/movie/${id}?api_key=${API_KEY}&append_to_response=videos,images`, options
@@ -98,7 +98,7 @@ const TvSearch = ({queryKey} : QueryFunctionContext<[string, string]>) => {
   ).then((res) => res.json())
 }
 
-const TvDetail = ({ queryKey } : QueryFunctionContext<[string, string]>) => {
+const TvDetail = ({ queryKey } : QueryFunctionContext<[string, number]>) => {
   const [_, id] = queryKey;
   return fetch(
     `${BASE_URL}/tv/${id}?api_key=${API_KEY}&append_to_response=videos,images`, options
